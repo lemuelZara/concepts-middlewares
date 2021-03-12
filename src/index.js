@@ -24,7 +24,16 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
-  // Complete aqui
+  const { user } = request;
+
+  const userFreePlanAvailable = !user.pro && user.todos.length < 10;
+  const userProPlanAvailable = user.pro;
+
+  if (!userFreePlanAvailable && !userProPlanAvailable) {    
+    return response.status(403).json({ error: 'You have reached the limit of your free plan, buy the PRO plan now!' });
+  }
+  
+  return next();
 }
 
 function checksTodoExists(request, response, next) {
